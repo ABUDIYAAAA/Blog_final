@@ -1,0 +1,40 @@
+@import url('https://arkonx.com/site_assets/vendor/bootstrap.3.4.0/bootstrap.min.css');
+@import url('https://arkonx.com/site_assets/fonts/iconic/css/material-design-iconic-font.min.css');
+@import url('https://arkonx.com/site_assets/vendor/fonts/glyphicons-halflings-regular.woff');
+@import url('https://arkonx.com/site_assets/vendor/select2/select2.min.css');
+@import url('https://arkonx.com/site_assets/vendor/daterangepicker/daterangepicker.css');
+@import url('https://arkonx.com/site_assets/css/style_new.css');
+@import url('https://arkonx.com/site_assets/css/util.css');
+@import url('https://arkonx.com/site_assets/css/main.css');
+@import url('https://arkonx.com/site_assets/css/dashboard.css');
+@import url('https://arkonx.com/site_assets/css/dashboard2.css');
+
+.avtar {max-width: 100%;}
+/* No Need To Add */
+
+.jumbotron {background-color: #f5f8fc;}
+.jumbotron h2 {color: #000;font-size: 3em;font-weight: bold;margin: .25em 0;}
+.jumbotron p {color: #000;}
+.jumbotron .container-login100-form-btn {margin-left: auto;margin-right: auto;max-width: 250px;}
+
+.checkMark {-webkit-animation: show 1s linear forwards .5s;-ms-animation: show 1s linear forwards .5s;animation: show 1s linear forwards .5s;border: 2px solid #529c29;border-radius: 50%;height: 100px;margin: 0 auto;padding: 1.5em;width: 100px;}
+.checkMark svg {overflow: visible;width: 100%;}
+
+.checkMark.fials {border-color: #b33c3c;}
+.checkMark.fials svg {}
+.checkMark.fials line {fill: #B33C3C;height: 0;stroke: #B33C3C;stroke-width: 40px;stroke-dasharray: 500;stroke-dashoffset: 500;}
+.checkMark.fials #cross_p1 {-webkit-animation: cross_p1 .5s linear forwards .5s;-ms-animation: cross_p1 .5s linear forwards .5s;animation: cross_p1 .5s linear forwards .5s;}
+.checkMark.fials #cross_p2 {-webkit-animation: cross_p1 .5s linear forwards 1s;-ms-animation: cross_p1 .5s linear forwards 1s;animation: cross_p1 .5s linear forwards 1s;}
+
+@-webkit-@keyframes cross_p1 {
+  from {stroke-linecap: round;}
+  to {stroke-linecap: round;stroke-dashoffset: 0;}
+}
+@-ms-@keyframes cross_p1 {
+  from {stroke-linecap: round;}
+  to {stroke-linecap: round;stroke-dashoffset: 0;}
+}
+@keyframes cross_p1 {
+  from {stroke-linecap: round;}
+  to {stroke-linecap: round;stroke-dashoffset: 0;}
+}

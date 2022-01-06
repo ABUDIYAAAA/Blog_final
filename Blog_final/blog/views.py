@@ -6,8 +6,9 @@ from django.views.generic import (TemplateView,ListView,
 from blog.models import Post,Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from blog.forms import PostForm,CommentForm
+from blog.forms import PostForm,CommentForm, PostEditForm
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 
 # Create your views here.
 class AboutView(TemplateView):
@@ -34,16 +35,16 @@ class PostDetailView(DetailView):
     """
     model = Post
 
-class CreatePostView(LoginRequiredMixin,CreateView):
-    """
-    view of formpage to write up the post, similar to 'login_required' decorator CBV's got
-    mixins which inherits to the classes provides the same functionality that a user must be
-    logged in, to add a post
-    """
-    login_url = '/login/'
-    redirect_field_name = 'blog/post_detail.html'
-    form_class = PostForm
-    model = Post
+# class CreatePostView(LoginRequiredMixin,CreateView):
+#     """
+#     view of formpage to write up the post, similar to 'login_required' decorator CBV's got
+#     mixins which inherits to the classes provides the same functionality that a user must be
+#     logged in, to add a post
+#     """
+#     login_url = '/login/'
+#     redirect_field_name = 'blog/post_detail.html'
+#     form_class = PostForm
+#     model = Post
 
 class PostUpdateView(LoginRequiredMixin,UpdateView):
     """
@@ -63,25 +64,25 @@ class PostDeleteView(LoginRequiredMixin,DeleteView):
     model = Post
     success_url = reverse_lazy('post_list')
 
-class DraftListView(LoginRequiredMixin,ListView):
-    """
-    Drafts are unpublished blogs, This view is to show them,
-    this also need login to see
-    """
-    login_url = '/signin'
-    redirect_field_name = 'blog/post_list.html'
-    model = Post
-
-    def get_queryset(self):
-        """
-        queryset to find which posts are not published
-        by looking up if the 'published_date' == null and order descending by created date
-        """
-        return Post.objects.filter(published_date__isnull=True).order_by('create_date')
-
 #######################################
 ## Functions that require a pk match ##
 #######################################
+@login_required
+def postcreateview(request):
+    form = PostForm(request.POST)
+    if request.method == "POST":
+        if form.is_valid():
+            post = form.save(commit=False)
+            user = User.objects.get(username=request.user.username)
+            post.author = user
+            post.save()
+            return redirect('post_detail',pk=post.pk)
+    else:
+        form = PostForm
+        return render(request, 'blog/post_form.html', {'form': form})
+
+
+
 
 @login_required
 def post_publish(request,pk):
@@ -92,10 +93,14 @@ def post_publish(request,pk):
     :return: to the post_detail view of published post
     """
     post = get_object_or_404(Post,pk=pk)
-    post.publish()
-    return redirect('post_detail',pk=pk)
+    popst = str(post.author)
+    if popst == request.user.username:
+        post.publish()
+        return redirect('post_detail',pk=pk)
+    else:
+        return render(request, 'blog/fail_page.html', {'reason': "ITS NOT YOUR POST BUDDY SO CHILL"})
 
-@login_required
+
 def add_comment_to_post(request,pk):
     """
     To add a comment when a 'request' with primary key('pk') of post given,
@@ -108,9 +113,18 @@ def add_comment_to_post(request,pk):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect('post_detail',pk=post.pk)
+            if request.user.is_authenticated:
+                user = request.user.username
+                comment.author = str(user)
+                comment.post = post
+                comment.save()
+                return redirect('post_detail',pk=post.pk)
+            else:
+                comment.author = 'anonymous'
+                comment.post = post
+                comment.save()
+                return redirect('post_detail',pk=post.pk)
+
     else:
         form = CommentForm
     return render(request,'blog/comment_form.html',{'form':form})

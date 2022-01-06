@@ -1,11 +1,10 @@
 from django import forms
 from blog.models import Post,Comment
-
+from django.contrib.auth.models import User
 class PostForm(forms.ModelForm):
-
     class Meta():
         model = Post
-        fields = ('author','title','text')
+        fields = ('title','text')
 
         # To get custom styling to forms, adding widget attribute
         # classnames refers to the external css library used
@@ -17,14 +16,24 @@ class PostForm(forms.ModelForm):
         }
 
 
+class PostEditForm(forms.ModelForm):
+    class Meta():
+        model = Post
+        fields = ('title', 'text')
+        widgets = {
+
+            'title':forms.TextInput(attrs={'class':'textinputclass'}),
+            'text':forms.Textarea(attrs={ 'class':'editable medium-editor-textarea postcontent'})
+        }
+        
+
 class CommentForm(forms.ModelForm):
 
     class Meta():
         model = Comment
-        fields = ('author','text')
+        fields = ('text',)
 
         # Similer kind of widgets as PostForm, no 'postcontent' custom class
         widgets = {
-            'author':forms.TextInput(attrs={'class':'textinputclass'}),
             'text':forms.Textarea(attrs={ 'class':'editable medium-editor-textarea'})
         }
