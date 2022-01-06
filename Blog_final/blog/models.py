@@ -2,14 +2,16 @@ from django.db import models
 #To add current time to posts based on UTC in settings.py
 from django.utils import timezone
 from django.urls import reverse
-
+from ckeditor.fields import RichTextField
 # Create your models here.
 class Post(models.Model):
     author = models.ForeignKey('auth.User',on_delete = models.CASCADE)
     title = models.CharField(max_length=200)
-    text = models.TextField()
+    #text = models.TextField()
+    text = RichTextField(blank=True, null=True)
     create_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(default=timezone.now)
+    likes = models.ManyToManyField('auth.User', related_name='blog_post')
 
     def publish(self):
         self.published_date = timezone.now()
@@ -31,6 +33,9 @@ class Post(models.Model):
         'self.pk' represents return to the detailed view of same post after creating
         '''
         return reverse("post_detail",kwargs={'pk':self.pk})
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title

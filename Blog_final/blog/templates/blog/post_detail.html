@@ -25,17 +25,28 @@
   <a class="btn btn-primary btn-comment" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
   <div class="container">
 
+  <br></br>
+  <hr>
+  <br></br>
+
+{% if  liked %}
+  <form action="{%url 'like_post' pk=post.pk%}" method="post">
+    {%csrf_token%}
+    <button class="blue"type="submit" name="post_id" value='{{post.id}}'><span class="glyphicon glyphicon-thumbs-down"></span></button>: {{total_likes}} Likes
+  </form>
+{%else%}
+  <form action="{%url 'like_post' pk=post.pk%}" method="post">
+    {%csrf_token%}
+    <button class="blue"type="submit" name="post_id" value='{{post.id}}'><span class="glyphicon glyphicon-thumbs-up"></span></button>: {{total_likes}} Likes
+  </form>
+{%endif%}
+
 
   {% for comment in post.comments.all %}
   <br>
       {% if user.is_authenticated or comment.approved_comment %}
 
               {{ comment.created_date }}
-              {% if not comment.approved_comment %}
-                  <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-                  <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
-              {% endif %}
-
           <p>{{ comment.text|safe|linebreaks }}</p>
           <p>Posted by: <strong>{{ comment.author }}</strong></p>
 

@@ -40,6 +40,7 @@ def signup(request):
             messages.error(request, "Username must be Alpha-Numeric!!")
             return render(request, "blog/fail_page.html", {'reason': 'Username must be Alpha-Numeric!! (must contain atealst 1 letter)'})
         User.objects.create_user(username, email, pass1)
+        return redirect('post_list')
         # myuser.is_active = False
         #myuser.is_active = False
 
@@ -61,7 +62,7 @@ def signin(request):
             login(request, user)
             fname = user.first_name
             # messages.success(request, "Logged In Sucessfully!!")
-            return render(request, "blog/post_list.html",{"fname":fname})
+            return redirect('post_list')
         else:
             messages.error(request, "Bad Credentials!!")
             return render(request, "blog/fail_page.html", {'reason': "Bad Credentials!! (Password or username are wrong)"})
@@ -72,4 +73,4 @@ def signin(request):
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
-    return render(request, "authentication/signin.html")
+    return redirect('post_list')
