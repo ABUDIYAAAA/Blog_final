@@ -124,6 +124,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIR = [
     BASE_DIR / 'templates',
 ]
+
+
+#SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'thegamingclan405@gmail.com'
+EMAIL_HOST_PASSWORD = 'nimit007'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

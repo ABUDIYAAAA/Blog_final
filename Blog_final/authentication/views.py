@@ -6,7 +6,8 @@ from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
-# Create your views here.
+from django.conf import settings
+
 def home(request):
     return render(request, "blog/post_list.html")
 
@@ -39,7 +40,6 @@ def signup(request):
             messages.error(request, "Username must be Alpha-Numeric!!")
             return render(request, "blog/fail_page.html", {'reason': 'Username must be Alpha-Numeric!! (must contain atealst 1 letter)'})
         User.objects.create_user(username, email, pass1)
-
         # myuser.is_active = False
         #myuser.is_active = False
 
