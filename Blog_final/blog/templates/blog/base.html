@@ -49,6 +49,10 @@
         <li>
           <a href="{% url 'authentication:signout' %}" >Log out</a>
         </li>
+
+        <li>
+          <a >Welcome: {{ user.username }}</a>
+        </li>
           {% else %}
           <li><a class='nav navbar-right' href="{% url 'authentication:signin' %}" ><span class="glyphicon glyphicon-user"></span></a></li>
         {% endif %}
