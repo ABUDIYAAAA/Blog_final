@@ -10,10 +10,23 @@ from blog.forms import PostForm,CommentForm, PostEditForm
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from .models import Post
 
 # Create your views here.
+
+
+def search_posts(request):
+    if request.method == "POST":
+        searched = request.POST.get('searched')
+        posts = Post.objects.filter(title__contains=searched)
+        return render(request, 'blog/search_blog.html', {'searched': searched, 'posts': posts})
+    else:
+        return render(request, 'blog/search_blog.html', {})
+
+
+
 class AboutView(TemplateView):
-    template_name = 'about.html'
+    template_name = 'blog/about.html'
 
 class PostListView(ListView):
     model = Post

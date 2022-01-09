@@ -1,0 +1,53 @@
+{% extends "blog/base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="bigbrand techfont centerstage posttitle">Hello: {{user.userprofile.user}}</h1>
+  </div><br>
+
+  <div class="container">
+    <img src="{{user.userprofile.profile_picture.url}}" alt="No profile picture yet! " class="profileimage  centerstage"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+<hr>
+
+{% if user.userprofile.bio %}
+<div class="container">
+  <h3 class="techfont">Bio: <br>{{user.userprofile.bio|safe}}</h3><br>
+  <br>
+  <br>
+  <br>
+{%else%}
+  <h3>class="techfont">No bio yet!</h3>
+{%endif%}
+</div>
+<hr>
+<h2 class="techfont">Change password: <a href="{%url 'authentication:password_change'%}">Change password</a></h2>
+<br>
+<br>
+<br>
+<br>
+<h2 class="techfont"><a href="{%url 'authentication:profilechange' pk=user.userprofile.pk%}">Change your profile</a></h2>
+
+
+{%if posts%}
+<h3>Posts by author:</h3>
+{% for post in  posts%}
+  <h4 class="techfont"><a href="{% url 'post_detail' pk=post.pk %}">{{post.title}}</a></h4>
+{% endfor %}
+{%else%}
+<a class="techfont" href="{%url 'post_new'%}">No posts yet.... why dont you write one :)</a><br><br><br>
+{%endif%}
+
+
+<a class="techfont" href="{% url 'authentication:signout' %}" >Log out</a>
+
+
+
+
+
+
+
+{% endblock %}

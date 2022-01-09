@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from ckeditor.fields import RichTextField
+
+
 # Create your models here.
 class Post(models.Model):
     author = models.ForeignKey('auth.User',on_delete = models.CASCADE)
@@ -11,7 +13,10 @@ class Post(models.Model):
     text = RichTextField(blank=True, null=True)
     create_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField('auth.User', related_name='blog_post')
+    likes = models.ManyToManyField('auth.User', related_name='blog_post', blank=True, null=True)
+    header_image = models.ImageField(null=True, blank=True, upload_to="images/")
+
+
 
     def publish(self):
         self.published_date = timezone.now()

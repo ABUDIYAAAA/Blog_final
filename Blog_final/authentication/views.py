@@ -7,11 +7,42 @@ from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
+from .forms import UserProfileForm,UserProfileUpdateForm
+from django.views.generic import TemplateView, UpdateView, DetailView
+from .models import UserProfile
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.urls import reverse_lazy
+from blog.models import Post
+
+
+
 
 def home(request):
     return render(request, "blog/post_list.html")
 
+
+
+def ProfileView(request):
+    model_ = Post
+    author = User.objects.get(username=request.user.username)
+    posts = Post.objects.filter(author=author)
+    return render(request, 'authentication/user_profile.html', {'posts': posts})
+
+# def ProfileView(request):
+#         author = User.objects.get(username=request.user.username)
+#         posts = Post.objects.filter(title__contains=request.user.username)
+#         return render(request, 'authentication/user_profile.html', {'posts': posts})
+
+class ProfileUpdateView(UpdateView):
+    model = UserProfile
+    template_name = 'authentication/profile_change.html'
+    form_class = UserProfileUpdateForm
+    success_url = reverse_lazy('post_list')
+
+
 def signup(request):
+    form = UserProfileForm(request.POST)
     if request.method == "POST":
         username = request.POST['username']
         fname = request.POST['fname']
@@ -19,6 +50,7 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
+        age = request.POST['age']
 
         if User.objects.filter(username=username):
             messages.error(request, "Username already exist! Please try some other username.")
@@ -39,13 +71,18 @@ def signup(request):
         if not username.isalnum():
             messages.error(request, "Username must be Alpha-Numeric!!")
             return render(request, "blog/fail_page.html", {'reason': 'Username must be Alpha-Numeric!! (must contain atealst 1 letter)'})
-        User.objects.create_user(username, email, pass1)
+        user = User.objects.create_user(username, email, pass1)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = user
+            profile.save()
+
         return redirect('post_list')
         # myuser.is_active = False
         #myuser.is_active = False
 
         messages.success(request, "Your Account has been created succesfully!!")
-    return render(request, "authentication/signup.html")
+    return render(request, "authentication/signup.html", {'form': form})
 
 
 
@@ -74,3 +111,7 @@ def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
     return redirect('post_list')
+
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('post_list')

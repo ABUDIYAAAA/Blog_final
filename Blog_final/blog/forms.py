@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class PostForm(forms.ModelForm):
     class Meta():
         model = Post
-        fields = ('title','text')
+        fields = ('title','text', 'header_image')
 
         # To get custom styling to forms, adding widget attribute
         # classnames refers to the external css library used

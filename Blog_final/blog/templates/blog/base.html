@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
 
 
+
         <!-- Custom CSS-->
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 
@@ -47,13 +48,15 @@
           <a href="{% url 'post_new' %}" >New Post</a>
         </li>
         <li>
-          <a href="{% url 'authentication:signout' %}" >Log out</a>
+          <form method="post" action="{%url 'search_posts'%}">
+            {% csrf_token %}
+            <input name="searched" type="search" placeholder="Search" aria-label="Search">
+            <button type="submit" class="btn btn-secondary">Search</button>
+          </form>
         </li>
+        <li><a href="{%url 'authentication:profile' %}"><img src="{{user.userprofile.profile_picture.url}}" alt="No profile picture!" class="profileimage navbarimage"></a></li>
 
-        <li>
-          <a >Welcome: {{ user.username }}</a>
-        </li>
-          {% else %}
+        {% else %}
           <li><a class='nav navbar-right' href="{% url 'authentication:signin' %}" ><span class="glyphicon glyphicon-user"></span></a></li>
         {% endif %}
 
@@ -76,6 +79,9 @@
         </div>
 
 <!--SCRIPTS-->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 <script type="text/javascript" src="{% static 'js/blog.js' %}"></script>
 

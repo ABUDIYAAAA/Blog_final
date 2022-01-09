@@ -122,16 +122,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIR = [
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+STATICFILES_DIRS = [
     BASE_DIR / 'templates',
 ]
 
 
 #SMTP
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'thegamingclan405@gmail.com'
-EMAIL_HOST_PASSWORD = 'nimit007'
+
 
 
 # Default primary key field type
